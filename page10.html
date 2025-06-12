@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Iframe Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .control-group:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-group h3 {
+            margin-bottom: 15px;
+            color: #4a5568;
+            font-size: 1.3rem;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(250, 112, 154, 0.4);
+        }
+
+        .btn-tertiary {
+            background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .btn-tertiary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(168, 237, 234, 0.4);
+        }
+
+        .iframe-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .iframe-wrapper {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .iframe-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            z-index: 1;
+        }
+
+        .iframe-title {
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin: -15px -15px 15px -15px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .iframe-wrapper:hover iframe {
+            transform: scale(1.02);
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+        }
+
+        @media (max-width: 768px) {
+            .iframe-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dynamic Iframe Website</h1>
+            <p class="subtitle">Dynamically load and control iframe content</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <h3>🌐 Popular Sites</h3>
+                <div class="btn-grid">
+                    <button class="btn-primary" onclick="loadSite('iframe1', 'https://example.com')">Example.com</button>
+                    <button class="btn-primary" onclick="loadSite('iframe2', 'https://httpbin.org/html')">HTTPBin HTML</button>
+                    <button class="btn-secondary" onclick="loadSite('iframe1', 'https://jsonplaceholder.typicode.com/')">JSON Placeholder</button>
+                    <button class="btn-secondary" onclick="loadSite('iframe2', 'https://reqres.in/')">ReqRes API</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>🔧 Tools & Demos</h3>
+                <div class="btn-grid">
+                    <button class="btn-tertiary" onclick="loadSite('iframe1', 'https://codepen.io/trending')">CodePen</button>
+                    <button class="btn-tertiary" onclick="loadSite('iframe2', 'https://developer.mozilla.org/en-US/')">MDN Docs</button>
+                    <button class="btn-primary" onclick="loadSite('iframe1', 'https://www.w3schools.com/')">W3Schools</button>
+                    <button class="btn-secondary" onclick="loadSite('iframe2', 'https://caniuse.com/')">Can I Use</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>🎯 Custom URL</h3>
+                <input type="url" id="customUrl" class="url-input" placeholder="Enter any URL (https://...)">
+                <div class="btn-grid">
+                    <button class="btn-primary" onclick="loadCustomUrl('iframe1')">Load in Frame 1</button>
+                    <button class="btn-secondary" onclick="loadCustomUrl('iframe2')">Load in Frame 2</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>⚡ Actions</h3>
+                <div class="btn-grid">
+                    <button class="btn-tertiary" onclick="refreshIframes()">Refresh Both</button>
+                    <button class="btn-tertiary" onclick="clearIframes()">Clear Both</button>
+                    <button class="btn-primary" onclick="resizeIframes()">Toggle Size</button>
+                    <button class="btn-secondary" onclick="swapIframes()">Swap Content</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="iframe-container">
+            <div class="iframe-wrapper">
+                <div class="iframe-title">Frame 1</div>
+                <iframe id="iframe1" src="about:blank"></iframe>
+            </div>
+            <div class="iframe-wrapper">
+                <div class="iframe-title">Frame 2</div>
+                <iframe id="iframe2" src="about:blank"></iframe>
+            </div>
+        </div>
+
+        <div class="status" id="status">
+            Ready to load content. Click any button above to get started!
+        </div>
+    </div>
+
+    <script>
+        let isResized = false;
+
+        function loadSite(iframeId, url) {
+            const iframe = document.getElementById(iframeId);
+            const wrapper = iframe.closest('.iframe-wrapper');
+            
+            wrapper.classList.add('loading');
+            updateStatus(`Loading ${url} in ${iframeId}...`);
+            
+            iframe.src = url;
+            
+            iframe.onload = function() {
+                wrapper.classList.remove('loading');
+                updateStatus(`✅ Successfully loaded ${url} in ${iframeId}`);
+            };
+            
+            iframe.onerror = function() {
+                wrapper.classList.remove('loading');
+                updateStatus(`❌ Failed to load ${url} in ${iframeId}`);
+            };
+        }
+
+        function loadCustomUrl(iframeId) {
+            const url = document.getElementById('customUrl').value.trim();
+            
+            if (!url) {
+                updateStatus('❌ Please enter a URL');
+                return;
+            }
+            
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                updateStatus('❌ URL must start with http:// or https://');
+                return;
+            }
+            
+            loadSite(iframeId, url);
+        }
+
+        function refreshIframes() {
+            const iframe1 = document.getElementById('iframe1');
+            const iframe2 = document.getElementById('iframe2');
+            
+            if (iframe1.src && iframe1.src !== 'about:blank') {
+                iframe1.src = iframe1.src;
+            }
+            if (iframe2.src && iframe2.src !== 'about:blank') {
+                iframe2.src = iframe2.src;
+            }
+            
+            updateStatus('🔄 Refreshed both iframes');
+        }
+
+        function clearIframes() {
+            document.getElementById('iframe1').src = 'about:blank';
+            document.getElementById('iframe2').src = 'about:blank';
+            updateStatus('🧹 Cleared both iframes');
+        }
+
+        function resizeIframes() {
+            const iframes = document.querySelectorAll('iframe');
+            
+            if (!isResized) {
+                iframes.forEach(iframe => {
+                    iframe.style.height = '600px';
+                });
+                updateStatus('📏 Increased iframe height to 600px');
+                isResized = true;
+            } else {
+                iframes.forEach(iframe => {
+                    iframe.style.height = '400px';
+                });
+                updateStatus('📏 Reset iframe height to 400px');
+                isResized = false;
+            }
+        }
+
+        function swapIframes() {
+            const iframe1 = document.getElementById('iframe1');
+            const iframe2 = document.getElementById('iframe2');
+            
+            const temp = iframe1.src;
+            iframe1.src = iframe2.src;
+            iframe2.src = temp;
+            
+            updateStatus('🔄 Swapped iframe content');
+        }
+
+        function updateStatus(message) {
+            const status = document.getElementById('status');
+            status.innerHTML = message;
+            status.style.animation = 'none';
+            status.offsetHeight; // Trigger reflow
+            status.style.animation = 'pulse 0.5s ease-in-out';
+        }
+
+        // Add some CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.02); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Handle Enter key in custom URL input
+        document.getElementById('customUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadCustomUrl('iframe1');
+            }
+        });
+
+        // Initialize with a welcome message
+        updateStatus('🚀 Dynamic Iframe Website loaded! Try loading some content.');
+    </script>
+</body>
+</html>
