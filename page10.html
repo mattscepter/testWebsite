@@ -299,6 +299,16 @@
             };
         }
 
+        function updateUrlParams(iframeId, url) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramName = iframeId === 'iframe1' ? 'frame1' : 'frame2';
+            urlParams.set(paramName, url);
+            
+            // Update URL without page reload
+            const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+            window.history.replaceState({}, '', newUrl);
+        }
+
         function loadCustomUrl(iframeId) {
             const url = document.getElementById('customUrl').value.trim();
             
@@ -312,7 +322,43 @@
                 return;
             }
             
+            // Update URL parameters
+            updateUrlParams(iframeId, url);
+            
             loadSite(iframeId, url);
+            
+            // Clear the input after successful load
+            document.getElementById('customUrl').value = '';
+        }
+
+        function loadFromUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const frame1Url = urlParams.get('frame1');
+            const frame2Url = urlParams.get('frame2');
+            
+            if (frame1Url) {
+                loadSite('iframe1', frame1Url);
+                updateStatus(`🔗 Loaded Frame 1 from URL parameter: ${frame1Url}`);
+            }
+            
+            if (frame2Url) {
+                loadSite('iframe2', frame2Url);
+                if (frame1Url) {
+                    updateStatus(`🔗 Loaded both frames from URL parameters`);
+                } else {
+                    updateStatus(`🔗 Loaded Frame 2 from URL parameter: ${frame2Url}`);
+                }
+            }
+            
+            // Show current URLs in status if any are loaded
+            if (frame1Url || frame2Url) {
+                setTimeout(() => {
+                    let statusMsg = '📋 Current URLs: ';
+                    if (frame1Url) statusMsg += `Frame1: ${frame1Url} `;
+                    if (frame2Url) statusMsg += `Frame2: ${frame2Url}`;
+                    updateStatus(statusMsg);
+                }, 2000);
+            }
         }
 
         function refreshIframes() {
@@ -332,7 +378,18 @@
         function clearIframes() {
             document.getElementById('iframe1').src = 'about:blank';
             document.getElementById('iframe2').src = 'about:blank';
-            updateStatus('🧹 Cleared both iframes');
+            
+            // Clear URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.delete('frame1');
+            urlParams.delete('frame2');
+            
+            const newUrl = urlParams.toString() ? 
+                `${window.location.pathname}?${urlParams.toString()}` : 
+                window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+            
+            updateStatus('🧹 Cleared both iframes and URL parameters');
         }
 
         function resizeIframes() {
@@ -390,8 +447,14 @@
             }
         });
 
-        // Initialize with a welcome message
-        updateStatus('🚀 Dynamic Iframe Website loaded! Try loading some content.');
+        // Initialize the page
+        window.addEventListener('load', function() {
+            loadFromUrlParams();
+            if (!new URLSearchParams(window.location.search).get('frame1') && 
+                !new URLSearchParams(window.location.search).get('frame2')) {
+                updateStatus('🚀 Dynamic Iframe Website loaded! Try loading some content or share URLs with ?frame1=url&frame2=url');
+            }
+        });
     </script>
 </body>
 </html>
