@@ -3,12 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script>function alert() {
-        console.log('Alerted');
-    }</script>
+    <title>Focus Visible Test - Outline None</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card.inaccessible {
+            border-left: 4px solid #d32f2f;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .card p {
+            color: #666;
+            margin: 12px 0 20px 0;
+        }
+
+        .example-box {
+            padding: 16px;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+
+        /* Accessible button */
+        .focus-visible-btn {
+            padding: 10px 16px;
+            border: 2px solid #0078d4;
+            background: #f0f8ff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .focus-visible-btn:focus {
+            outline: 3px solid #ff9800;
+            outline-offset: 3px;
+        }
+
+        /* Inaccessible button */
+        .no-focus-btn {
+            padding: 10px 16px;
+            border: 2px solid #888;
+            background: #eee;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .no-focus-btn:focus {
+            outline: none; /* WCAG failure */
+        }
+    </style>
 </head>
 <body>
-    <div onclick="alert()" style="height: 100px; width: 100px; border: 2px solid red;"> <a href="www.google.com"></a></div>
+
+<div class="container">
+
+    <!-- Accessible Example -->
+    <div class="card">
+        <h3>✔ Accessible Example</h3>
+        <p>Button shows a clear visible focus indicator when navigating with keyboard.</p>
+
+        <div class="example-box">
+            <button class="focus-visible-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Inaccessible Example -->
+    <div class="card inaccessible">
+        <h3>✘ Inaccessible Example</h3>
+        <p>Button removes the focus outline, making keyboard focus impossible to see.</p>
+
+        <div class="example-box">
+            <button class="no-focus-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+</div>
+
 </body>
 </html>
