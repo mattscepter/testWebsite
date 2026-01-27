@@ -139,61 +139,81 @@
     </style>
   </head>
   <body>
-    <h1>WCAG AA Color Contrast Compliance Examples</h1>
-    <p>
-      This webpage demonstrates WCAG AA compliance with various color contrast
-      scenarios, including background images and gradients, for normal and large
-      text.
-    </p>
-
-    <h2>Normal Text Examples</h2>
+   <section class="sc-block" id="sc-2-4-1">
+    <h2>2.4.1 Bypass Blocks (A)</h2>
     <div class="container">
-      <!-- Fail WCAG AA for Normal Text -->
-      <div class="example fail-aa-normal">
-        <strong>Fail AA:</strong> Low contrast between text and background.
-        <p class="note">(Background: #cccccc, Text: #f3f3f3)</p>
-      </div>
 
-      <!-- Pass WCAG AA for Normal Text -->
-      <div class="example pass-aa-normal">
-        <strong>Pass AA:</strong> Sufficient contrast for normal text.
-        <p class="note">(Background: #ffffff, Text: #000000)</p>
-      </div>
+    <!-- Accessible -->
+    <div class="card">
+        <h3>✔ Accessible Example</h3>
+        <p>Keyboard users can skip long navigation and jump to main content.</p>
+
+        <div class="example-box">
+
+            <!-- Skip Link -->
+            <a href="#mainContentA" class="skip-link">Skip to main content</a>
+
+            <!-- Mock Navigation -->
+            <nav style="display:flex; gap:12px; margin-top:10px;">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Services</a>
+                <a href="#">About</a>
+                <a href="#">Support</a>
+            </nav>
+
+            <!-- Main Content -->
+            <div id="mainContentA" tabindex="-1" style="margin-top:15px;">
+                <strong>Main content (user lands here using skip link)</strong>
+            </div>
+
+        </div>
     </div>
 
-    <h2>Large Text Examples</h2>
-    <div class="container">
-      <!-- Fail WCAG AA for Large Text -->
-      <div class="example fail-aa-large">
-        <strong>Fail AA (Large Text):</strong> Low contrast for large text.
-        <p class="note">(Background: #ffea00, Text: #ffeb3b)</p>
-      </div>
+    <!-- Inaccessible -->
+    <div class="card inaccessible">
+        <h3>✘ Inaccessible Example</h3>
+        <p>No skip link—keyboard users must tab through every navigation link.</p>
 
-      <!-- Pass WCAG AA for Large Text -->
-      <div class="example pass-aa-large">
-        <strong>Pass AA (Large Text):</strong> Sufficient contrast for large
-        text.
-        <p class="note">(Background: #282828, Text: #ffea00)</p>
-      </div>
+        <div class="example-box">
+
+            <nav style="display:flex; gap:12px; margin-top:10px;">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Services</a>
+                <a href="#">About</a>
+                <a href="#">Support</a>
+            </nav>
+
+            <div style="margin-top:15px;">
+                <strong>Main content (keyboard users reach this very late)</strong>
+            </div>
+
+        </div>
     </div>
 
-    <h2>Background Image and Gradient Examples</h2>
-    <div class="container">
-      <div class="example gradient-fail">
-        <p class="gradient-text-fail">Hard to Read Gradient Text</p>
-      </div>
+</div>
 
-      <div class="readable-text example">
-        Readable Text on Dark Background Image
-      </div>
+<style>
+/* SAME SKIP LINK STYLE USED IN ALL WCAG DEMOS */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 10px;
+    background: #005fcc;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    z-index: 999;
+    transition: top 0.25s ease;
+}
 
-      <div class="hard-to-read-text example">
-        Hard to Read Text on Light Background Image
-      </div>
+.skip-link:focus {
+    top: 10px;
+}
+</style>
 
-      <div class="gradient-fail-bg example">
-        Hard to Read Text on Gradient Background
-      </div>
-    </div>
+</section>
   </body>
 </html>
