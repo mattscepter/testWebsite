@@ -1,14 +1,54 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>table-layout property</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>panel1 focus test</title>
+  <style>
+    :root {
+      --primary-color: #1B5E20;
+      --primary-text-color: #FFFFFF;
+      --secondary-color: #E8F5E9;
+      --text-color: #212121;
+      --link-color: #145A32;
+      --link-hover-color: #0D3B11;
+      --background-light: #F5F5F5;
+      --border-color: #757575;
+      --focus-outline: #FFD700;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--text-color);
+      line-height: 1.5;
+      font-size: 16px;
+      background-color: #FAFAFA;
+    }
+
+    .tab-panel {
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      border-top: none;
+      display: none;
+    }
+
+    .tab-panel[aria-hidden="false"] {
+      display: block;
+    }
+  </style>
 </head>
-
 <body>
-    <h3>Page9</h3>
-    <iframe src="./page6.html" title="browserstack.com" height="1000" width="1000" ></iframe>
-    <a href="google.com">Click here</a>
+  <div id="panel1" role="tabpanel" aria-labelledby="tab1" class="tab-panel" aria-hidden="false" tabindex="0">
+    <h4>Accessibility Guidelines</h4>
+    <p>There are several key accessibility guidelines and standards:</p>
+    <ul>
+      <li><strong>WCAG 2.1:</strong> Web Content Accessibility Guidelines</li>
+      <li><strong>Section 508:</strong> US federal regulations for digital accessibility</li>
+      <li><strong>EN 301 549:</strong> European accessibility standard</li>
+      <li><strong>ADA:</strong> Americans with Disabilities Act</li>
+    </ul>
+  </div>
 </body>
-
 </html>
