@@ -721,6 +721,20 @@
         <section aria-labelledby="tabbed-interface-title">
             <h3 id="tabbed-interface-title">10. Accessible Tabbed Interface</h3>
             <div class="tabs">
+                <ul role="tablist" class="tab-list" aria-label="Accessibility resources">
+                    <li class="tab" role="presentation">
+                        <button id="tab1" role="tab" aria-selected="true" aria-controls="panel1"
+                            class="tab-button">Guidelines</button>
+                    </li>
+                    <li class="tab" role="presentation">
+                        <button id="tab2" role="tab" aria-selected="false" aria-controls="panel2"
+                            class="tab-button">Tools</button>
+                    </li>
+                    <li class="tab" role="presentation">
+                        <button id="tab3" role="tab" aria-selected="false" aria-controls="panel3"
+                            class="tab-button">Resources</button>
+                    </li>
+                </ul>
                 <div id="panel1" role="tabpanel" aria-labelledby="tab1" class="tab-panel" aria-hidden="false">
                     <h4>Accessibility Guidelines</h4>
                     <p>There are several key accessibility guidelines and standards:</p>
