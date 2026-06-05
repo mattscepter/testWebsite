@@ -4,9 +4,15 @@
   <meta charset="UTF-8">
   <title>No body tag</title>
   <!--
-    Edge case: HTML document with NO <body> element in the markup.
-    Everything lives inside <head>. Used to verify the engine skips
-    pages where querySelector('body') is null instead of crashing.
+    Edge case: HTML is always parsed with a synthesized <body>, so a
+    head-only document still has document.body. To genuinely make
+    querySelector('body') null at scan time, we remove the body element
+    once it exists (mirrors SPA/teardown scripts that detach the body).
   -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (document.body) document.body.remove();
+    });
+  </script>
 </head>
 </html>
