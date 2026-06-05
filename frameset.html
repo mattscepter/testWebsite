@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Frameset - no body element</title>
+</head>
+<!--
+  Edge case: a frameset document has <frameset> instead of <body>.
+  document.querySelector('body') returns null here (document.body
+  resolves to the frameset, but there is no real <body> element).
+-->
+<frameset cols="50%,50%">
+  <frame src="./page5.html" title="left frame">
+  <frame src="./page6.html" title="right frame">
+  <noframes>This page uses frames; no body element exists.</noframes>
+</frameset>
+</html>

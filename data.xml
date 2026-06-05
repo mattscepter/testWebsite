@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Edge case: a plain XML document served as application/xml.
+  There is no HTML <body> element, so querySelector('body') is null.
+  Note: deliberately no element named "body" to keep the case clean.
+-->
+<catalog>
+  <product id="1">
+    <name>Interior Paint</name>
+    <colour>Off White</colour>
+    <price currency="SEK">249</price>
+  </product>
+  <product id="2">
+    <name>Paint Brush</name>
+    <colour>N/A</colour>
+    <price currency="SEK">59</price>
+  </product>
+</catalog>

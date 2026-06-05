@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Body edge cases - skip fixtures</title>
+</head>
+<body>
+  <h1>Edge-case fixtures: documents with no &lt;body&gt; element</h1>
+  <p>
+    These pages exercise the "skip pages without a body tag" fix. In each,
+    <code>document.querySelector('body')</code> is <code>null</code> (or the
+    body is unavailable at scan time), which previously caused the
+    <code>Cannot read properties of null (reading 'outerHTML')</code> crash.
+  </p>
+  <ul>
+    <li><a href="./nobody.html">nobody.html</a> - HTML with no &lt;body&gt; in markup</li>
+    <li><a href="./frameset.html">frameset.html</a> - frameset document (no body element)</li>
+    <li><a href="./data.xml">data.xml</a> - plain XML document</li>
+    <li><a href="./feed.xml">feed.xml</a> - RSS feed (XML)</li>
+    <li><a href="./image.svg">image.svg</a> - standalone SVG (XML)</li>
+    <li><a href="./nobody.xhtml">nobody.xhtml</a> - XHTML (application/xhtml+xml) with no body</li>
+    <li><a href="./slow-body.html">slow-body.html</a> - render-blocking head; body parsed late</li>
+  </ul>
+  <p>
+    Note: the XML/SVG/XHTML cases must be served with their correct
+    content type (via GitHub Pages, not raw.githubusercontent.com) for the
+    parser to skip body synthesis.
+  </p>
+</body>
+</html>

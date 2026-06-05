@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Edge case: an RSS feed (XML). No HTML <body>; querySelector('body')
+  is null. Many sites expose /feed or /rss endpoints that get crawled.
+-->
+<rss version="2.0">
+  <channel>
+    <title>Test Feed</title>
+    <link>https://mattscepter.github.io/testWebsite/</link>
+    <description>RSS feed fixture with no HTML body element</description>
+    <item>
+      <title>First item</title>
+      <link>https://mattscepter.github.io/testWebsite/page5.html</link>
+      <description>Item one</description>
+    </item>
+    <item>
+      <title>Second item</title>
+      <link>https://mattscepter.github.io/testWebsite/page6.html</link>
+      <description>Item two</description>
+    </item>
+  </channel>
+</rss>
