@@ -7,12 +7,13 @@
     Edge case mirroring the real-world polyfill.io incident: a
     render-blocking <script> in <head> stalls the parser so the <body>
     is not present when the page is scanned within the load timeout.
-    The script below busy-waits ~8s to simulate a slow/hanging
-    third-party script before the parser reaches <body>.
+    The script below busy-waits ~60s (longer than the 30s scan timeout)
+    to simulate a slow/hanging third-party script before the parser
+    reaches <body>.
   -->
   <script>
     (function () {
-      var deadline = new Date().getTime() + 8000;
+      var deadline = new Date().getTime() + 60000;
       // Synchronous busy-wait: blocks parsing of everything below,
       // including <body>, just like a hanging render-blocking script.
       while (new Date().getTime() < deadline) { /* stall */ }
