@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Type C batching test — AXE-3497</title>
+
+    <!--
+      PURPOSE
+      -------
+      Generate a Type C accessibility result large enough (> a11y.payload_size_limit,
+      ~2 MB serialized) to force ip-protection/workerC to split the result into
+      multiple weba11y POSTs via batchAndSendTypeCResponse (AXE-3497).
+
+      Type C rules run on Percy inside dom-forge-core, so you must run a real
+      Advanced/Type C scan against this page's URL (host it somewhere the scanner
+      can reach) — opening it locally only renders it, it does not trigger Type C.
+
+      Active Type C rules exercised here (see dom-forge-core/lib/core/public/run.js):
+        - color-contrast            -> the bulk: thousands of low-contrast text nodes
+        - non-text-control-contrast -> faint-border controls
+        - focus-visible             -> focusable elements with no focus indicator
+        - reflow-4x-zoom-scroll     -> wide, non-wrapping rows overflowing 320px
+
+      SCALING
+      -------
+      ?count=N  sets the number of low-contrast text blocks (default 8000).
+      8000 blocks comfortably exceeds 2 MB and should split into ~3-4 batches.
+      Lower it (e.g. ?count=1500) to stay UNDER the limit and confirm the
+      single-POST (un-split) path; raise it to force more batches.
+
+      WHAT TO VERIFY (ip-protection worker logs)
+      ------------------------------------------
+        SERVER_TYPE_C_PAYLOAD_SIZE -> "Type C payload <bytes> -> <N> batch(es)"
+        N > 1 confirms batching; the scan must still finalise once (TYPE_C EOF),
+        and weba11y must receive every violation across the batches.
+    -->
+
+    <style>
+      body {
+        background: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0 8px 40px;
+      }
+      /* color-contrast violation: ~1.9:1 (light gray on white, fails 4.5:1) */
+      .lc {
+        color: #b9b9b9;
+        background: #ffffff;
+        font-size: 14px;
+        margin: 2px 0;
+      }
+      /* focus-visible violation: focusable, no visible focus indicator */
+      .nf:focus,
+      .nf:focus-visible {
+        outline: none;
+        box-shadow: none;
+      }
+      /* non-text-control-contrast violation: ~1.05:1 control border vs bg */
+      .lcc {
+        border: 1px solid #f1f1f1;
+        background: #ffffff;
+        color: #b9b9b9;
+        padding: 2px 6px;
+      }
+      /* reflow-4x-zoom-scroll violation: wide, non-wrapping content */
+      .wide {
+        white-space: nowrap;
+        width: 1800px;
+        color: #b9b9b9;
+        background: #ffffff;
+        font-size: 14px;
+      }
+      #summary {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #fff8c4;
+        color: #000000;
+        border-bottom: 2px solid #000;
+        padding: 10px 12px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header id="summary">Generating Type C test content…</header>
+    <main id="root"></main>
+
+    <script>
+      (function generate() {
+        var params = new URLSearchParams(window.location.search);
+        var count = parseInt(params.get('count'), 10);
+        if (!count || count < 1) count = 8000;
+
+        // Keep secondary rules small so focus-visible doesn't tab thousands of
+        // controls; color-contrast text blocks drive the payload volume.
+        var SECONDARY = 50;
+        var REFLOW_ROWS = 25;
+
+        var lorem =
+          'The quick brown fox jumps over the lazy dog while inspecting ' +
+          'accessibility contrast ratios, focus indicators and reflow ' +
+          'behaviour at four hundred percent zoom on this synthetic page';
+
+        var root = document.getElementById('root');
+        var frag = document.createDocumentFragment();
+
+        // 1) color-contrast volume — each node unique so nothing dedupes away.
+        for (var i = 0; i < count; i++) {
+          var p = document.createElement('p');
+          p.className = 'lc';
+          p.id = 'lc-' + i;
+          p.setAttribute('data-idx', String(i));
+          p.textContent = '#' + i + ' ' + lorem + ' [' + i + ']';
+          frag.appendChild(p);
+        }
+
+        // 2) focus-visible + non-text-control-contrast (small set).
+        for (var j = 0; j < SECONDARY; j++) {
+          var a = document.createElement('a');
+          a.className = 'nf lc';
+          a.href = '#lc-' + j;
+          a.textContent = 'low-contrast link without focus indicator ' + j;
+          frag.appendChild(a);
+
+          var btn = document.createElement('button');
+          btn.className = 'nf lcc';
+          btn.type = 'button';
+          btn.textContent = 'faint-border control ' + j;
+          frag.appendChild(btn);
+        }
+
+        // 3) reflow-4x-zoom-scroll (wide non-wrapping rows).
+        for (var k = 0; k < REFLOW_ROWS; k++) {
+          var wide = document.createElement('div');
+          wide.className = 'wide';
+          wide.textContent =
+            'WIDE-NOWRAP-' + k + ' ' + lorem + ' ' + lorem + ' ' + lorem;
+          frag.appendChild(wide);
+        }
+
+        root.appendChild(frag);
+
+        document.getElementById('summary').textContent =
+          'Type C batching test — ' +
+          count +
+          ' color-contrast blocks, ' +
+          SECONDARY +
+          ' links + ' +
+          SECONDARY +
+          ' controls, ' +
+          REFLOW_ROWS +
+          ' reflow rows. Append ?count=N to scale (default 8000).';
+      })();
+    </script>
+  </body>
+</html>
