@@ -30,27 +30,10 @@
     </style>
   </head>
   <body>
-    <h1>Cross-origin iframe test page (parent)</h1>
-    <p>
-      The frame below is served from
-      <code>browserstack.github.io</code> — a different site from this page,
-      so it loads as an out-of-process iframe (OOPIF).
-    </p>
-
-    <!-- some same-origin content in the parent, with a listener -->
-    <div class="host-controls">
-      <button id="host-btn" type="button">Parent button (same-origin)</button>
-    </div>
-
-    <!-- cross-origin / cross-site iframe -->
     <iframe
       id="cross-frame"
       title="BrowserStack a11y checks (cross-origin)"
       src="https://browserstack.github.io/bs-a11y-checks/all/index.html"
     ></iframe>
-
-    <script>
-      document.getElementById('host-btn').addEventListener('click', () => {});
-    </script>
   </body>
 </html>
