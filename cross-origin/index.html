@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cross-origin iframe test cases</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 24px; color: #1a1a1a; max-width: 900px; }
+      h1 { font-size: 22px; }
+      li { margin: 6px 0; line-height: 1.6; }
+      code { color: #555; font-size: 12px; }
+      .tag { font-size: 11px; padding: 1px 6px; border-radius: 3px; color: #fff; }
+      .framable { background: #2e7d32; }
+      .blocked  { background: #c62828; }
+      .bot403   { background: #ef6c00; }
+      .redirect { background: #6a1b9a; }
+      p.note { color: #555; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <h1>Cross-origin iframe test cases</h1>
+    <p class="note">Each page embeds one real site in a cross-origin <code>&lt;iframe id="cross-frame"&gt;</code>.
+    Sites tagged <span class="tag blocked">blocked (needs proxy)</span> / <span class="tag bot403">403 bot-wall</span>
+    send framing-refusal headers or bot walls and render blank unless the scan runs through a header-stripping proxy
+    (jackproxy); they double as <code>xoNotEvaluated</code> cases. See <a href="./multi.html">multi.html</a> for the
+    multi-frame aggregation case. Feasibility probed 2026-07-08.</p>
+    <ul>
+      <li><a href="./amazon.html">Amazon</a> <span class="tag framable">loads</span> <code>https://www.amazon.com/</code></li>
+      <li><a href="./alibaba.html">Alibaba</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.alibaba.com/</code></li>
+      <li><a href="./ebay.html">eBay</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.ebay.com/</code></li>
+      <li><a href="./walmart.html">Walmart</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.walmart.com/</code></li>
+      <li><a href="./taobao.html">Taobao (World)</a> <span class="tag framable">loads</span> <code>https://world.taobao.com/</code></li>
+      <li><a href="./rakuten.html">Rakuten</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.rakuten.com/</code></li>
+      <li><a href="./flipkart.html">Flipkart</a> <span class="tag bot403">403 bot-wall</span> <code>https://www.flipkart.com/</code></li>
+      <li><a href="./asos.html">ASOS</a> <span class="tag redirect">redirect</span> <code>https://www.asos.com/</code></li>
+      <li><a href="./etsy.html">Etsy</a> <span class="tag bot403">403 bot-wall</span> <code>https://www.etsy.com/</code></li>
+      <li><a href="./target.html">Target</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.target.com/</code></li>
+      <li><a href="./aliexpress.html">AliExpress</a> <span class="tag framable">loads</span> <code>https://www.aliexpress.com/</code></li>
+      <li><a href="./nordstrom.html">Nordstrom</a> <span class="tag framable">loads</span> <code>https://www.nordstrom.com/</code></li>
+      <li><a href="./ikea.html">IKEA</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.ikea.com/</code></li>
+      <li><a href="./hm.html">H&M</a> <span class="tag bot403">403 bot-wall</span> <code>https://www2.hm.com/en_in/index.html</code></li>
+      <li><a href="./costco.html">Costco</a> <span class="tag framable">loads</span> <code>https://www.costco.com/</code></li>
+      <li><a href="./chase.html">Chase</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.chase.com/</code></li>
+      <li><a href="./bankofamerica.html">Bank of America</a> <span class="tag blocked">blocked (needs proxy)</span> <code>https://www.bankofamerica.com/</code></li>
+      <li><a href="./icbc.html">ICBC</a> <span class="tag framable">loads</span> <code>https://www.icbc.com.cn/</code></li>
+      <li><a href="./ccb.html">China Construction Bank</a> <span class="tag framable">loads</span> <code>http://www.ccb.com/cn/home/indexv3.html</code></li>
+    </ul>
+  </body>
+</html>
