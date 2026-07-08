@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cross-origin iframe SIZE matrix (AI Type C)</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 24px; color: #1a1a1a; max-width: 900px; }
+      h1 { font-size: 22px; }
+      li { margin: 6px 0; line-height: 1.5; }
+      span { color: #555; font-size: 13px; }
+      p.note { color: #555; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <h1>Cross-origin iframe size matrix — AI Type C</h1>
+    <p class="note">Every case embeds the same AI-rich cross-origin page
+    (<code>https://browserstack.github.io/bs-a11y-checks/all/typec.html</code>: meaningful-alt-text images, text-in-images, color-contrast + color-contrast-ai,
+    non-text-control-contrast) so content is deterministic and only iframe geometry varies.
+    Width cases are the primary meaningful-alt-text band-slicing stress (width drives content reflow →
+    context-band count). See <a href="../index.html">../index.html</a> for the real-site cases.</p>
+    <ul>
+      <li><a href="./height-tiny.html">height-tiny.html</a> — <b>height 120px</b> <span>Option A expand from tiny; almost nothing visible pre-expansion</span></li>
+      <li><a href="./height-short.html">height-short.html</a> — <b>height 400px</b> <span>expand from short</span></li>
+      <li><a href="./height-medium.html">height-medium.html</a> — <b>height 800px</b> <span>baseline</span></li>
+      <li><a href="./height-tall.html">height-tall.html</a> — <b>height 3000px</b> <span>expand from tall; below-fold context</span></li>
+      <li><a href="./height-auto.html">height-auto.html</a> — <b>no height (~150px)</b> <span>default height, content overflows</span></li>
+      <li><a href="./height-vh.html">height-vh.html</a> — <b>height 100vh</b> <span>viewport-relative height</span></li>
+      <li><a href="./height-percent.html">height-percent.html</a> — <b>height 100%</b> <span>full-height chain</span></li>
+      <li><a href="./width-mobile-360.html">width-mobile-360.html</a> — <b>width 360px</b> <span>AI: narrow reflow -> most band slices (band-grouping stress)</span></li>
+      <li><a href="./width-tablet-768.html">width-tablet-768.html</a> — <b>width 768px</b> <span>AI: mid reflow -> mid band count</span></li>
+      <li><a href="./width-desktop-1280.html">width-desktop-1280.html</a> — <b>width 1280px</b> <span>AI: matches scan viewport -> fewest bands</span></li>
+      <li><a href="./overflow-scroll.html">overflow-scroll.html</a> — <b>overflow:auto box</b> <span>Option A vs inner scroll (Option B FN region)</span></li>
+      <li><a href="./nested-depth2.html">nested-depth2.html</a> — <b>cross-origin @ depth 2</b> <span>recursive descent + 2-hop frame-path prefix</span></li>
+      <li><a href="./multi-mixed-size.html">multi-mixed-size.html</a> — <b>mixed-size multi-frame</b> <span>AI: per-realm buffer -> single top-frame flush (aggregation)</span></li>
+      <li><a href="./clamp-tall-16k.html">clamp-tall-16k.html</a> — <b>parent > 16k px</b> <span>viewport-zoom clamp; past-clamp frames = xoNotEvaluated</span></li>
+      <li><a href="./frame-cap-22.html">frame-cap-22.html</a> — <b>22 frames > cap</b> <span>MAX_FRAMES cap; capped frames = xoNotEvaluated</span></li>
+    </ul>
+  </body>
+</html>

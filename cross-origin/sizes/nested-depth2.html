@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>XO size — cross-origin frame nested inside a same-origin frame (depth 2)</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; color: #1a1a1a; }
+      h1 { font-size: 18px; }
+      iframe { border: 1px solid #ccc; }
+      #same-origin-frame { width: 100%; height: 1400px; border: 2px dashed #2e7d32; }
+    </style>
+  </head>
+  <body>
+    <h1>Cross-origin size case — cross-origin frame nested inside a same-origin frame (depth 2)</h1>
+    <iframe id="same-origin-frame" title="same-origin intermediate" src="./nested-inner.html"></iframe>
+  </body>
+</html>
